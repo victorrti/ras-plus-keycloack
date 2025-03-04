@@ -69,9 +69,7 @@ class UserServiceTest {
 
     @Test
     void given_create_when_idIsNotNull_then_throwBadRequestException() {
-
         Assertions.assertThrows(BadRequestException.class, () -> userService.create(dto));
-
         verify(userTypeRepository, times(0)).findById(any());
         verify(userRepository, times(0)).save(any());
     }

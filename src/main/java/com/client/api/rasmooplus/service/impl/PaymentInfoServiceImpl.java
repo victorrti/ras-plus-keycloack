@@ -22,7 +22,7 @@ import com.client.api.rasmooplus.model.jpa.UserCredentials;
 import com.client.api.rasmooplus.model.jpa.UserPaymentInfo;
 import com.client.api.rasmooplus.repositoy.jpa.UserRepository;
 import com.client.api.rasmooplus.repositoy.jpa.UserTypeRepository;
-import com.client.ws.rasmooplus.repositoy.jpa.*;
+
 import com.client.api.rasmooplus.service.PaymentInfoService;
 import com.client.api.rasmooplus.utils.PasswordUtils;
 import org.springframework.beans.factory.annotation.Value;

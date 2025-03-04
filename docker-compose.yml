@@ -1,28 +1,58 @@
-version: '3.1'
-
 services:
-
   mysql:
-    image: mysql
+    image: mysql:8.0
     ports:
       - 3306:3306
-    command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: senha123
-      MYSQL_DATABASE: RASPLUS
-      MYSQL_USER: rasmoo
-      MYSQL_PASSWORD: senha123
+      MYSQL_ROOT_PASSWORD: 123456  # Senha para o usuário root
+      MYSQL_DATABASE: keycloak     # Criação do banco de dados 'KEYCLOAK'
+      MYSQL_USER: victor           # Usuário regular
+      MYSQL_PASSWORD: 123456       # Senha do usuário 'victor'
     volumes:
-    - mysql_data_container:/data/db      
-    
+      - mysql_data_container:/var/lib/mysql   # Para armazenar os dados do MySQL
+      - ./initdb:/docker-entrypoint-initdb.d  # Scripts SQL do diretório 'initdb'
+    networks:
+      - keycloak_network
+
   redis:
     image: redis:4
-    container_name: redis-rasplus
+    container_name: redis-rasplus-1
     ports:
       - "6379:6379"
     volumes:
       - redis_data_container:/data/redis
+
+
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:19.0.1
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=mysql
+      - KC_DB_USERNAME=victor
+      - KC_DB_PASSWORD=123456
+      - KC_DB_URL_HOST=mysql
+      - KC_DB_URL_PORT=3306
+      - KC_DB_SCHEMA=keycloak
+    ports:
+      - 8080:8080
+    command: start-dev
+    volumes:
+      - keycloak_data_container:/opt/jboss/keycloak/standalone/data
+    depends_on:
+      - mysql
+    networks:
+      - keycloak_network
+
+
+networks:
+  keycloak_network:
+    driver: bridge
+
 volumes:
   mysql_data_container:
-  redis_data_container:            
+  redis_data_container:
+  keycloak_data_container:
+

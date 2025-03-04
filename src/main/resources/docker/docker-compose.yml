@@ -1,0 +1,41 @@
+version: '3.1'
+
+services:
+
+  mysql:
+    image: mysql
+    restart: always   
+    ports: 
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: RASMOPLUS
+      MYSQL_USER: victor
+      MYSQL_PASSWORD: 123456
+    volumes:
+      - mysql_data_container:/data/db
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: victor
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+    volumes:
+    - mongo_data_container:/data/db
+    ports: 
+      - 27017:27017
+  redis:
+    image: redis:4
+    container_name: redis-rasplus
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data_container:/data/redis
+volumes:
+  mysql_data_container:
+  mongo_data_container: 
+  redis_data_container:
+
+
+   
